@@ -25,7 +25,6 @@ Windows Exchange Server :
 11. Install Autorun, Everything
 12. reboot computer
 
-13. Pass it to Melissa
 
 Windows Client:
 
