@@ -282,7 +282,7 @@ Windows Client:
 	wevtutil sl System /ms:1024000
 	wevtutil sl "Windows Powershell" /ms:1024000
 	wevtutil sl "Microsoft-Windows-PowerShell/Operational" /ms:1024000
-#_24. IPv6
+#_24. Disable IPv6
 	reg add "HKLM\SYSTEM\CurrentControlSet\services\tcpip6\parameters" /v DisabledComponents /t REG_DWORD /d 0xFF /f
 #_24. Uninstall pups	
 
