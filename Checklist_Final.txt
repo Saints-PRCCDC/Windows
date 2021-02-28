@@ -22,8 +22,10 @@ Windows Exchange Server :
 	setx /M MP_FORCE_USE_SANDBOX 1
 #_10. Update signatures
 	"%ProgramFiles%"\"Windows Defender"\MpCmdRun.exe -SignatureUpdate
-#_11. Install Autorun, Everything
-#_12. reboot computer
+#_11. Disable IPv6
+	reg add "HKLM\SYSTEM\CurrentControlSet\services\tcpip6\parameters" /v DisabledComponents /t REG_DWORD /d 0xFF /f
+#_12. Install Autorun, Everything
+#_13. reboot computer
 
 
 Windows Client:
@@ -280,6 +282,8 @@ Windows Client:
 	wevtutil sl System /ms:1024000
 	wevtutil sl "Windows Powershell" /ms:1024000
 	wevtutil sl "Microsoft-Windows-PowerShell/Operational" /ms:1024000
+#_24. IPv6
+	reg add "HKLM\SYSTEM\CurrentControlSet\services\tcpip6\parameters" /v DisabledComponents /t REG_DWORD /d 0xFF /f
 #_24. Uninstall pups	
 
 
