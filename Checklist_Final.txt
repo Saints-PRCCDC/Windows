@@ -1,31 +1,51 @@
-Windows Exchange Server : 
+#Windows Exchange Server : 
 
 #_1. Change Password
 #_2. Check Firewall enable
 #_3. check Window Defence enable
 #_4. Check IP Address and share it to Peter
-#_5. Remove ALL PUPs (including Office and Adobe. Everything beside Windows program)
-#_6. Enable Firewall Logging
+#_5. Clear DNS Cache (DNS Poisoning)
+	ipconfig /displaydns
+	ipconfig /flushdns
+
+#_6. Remove ALL PUPs (including Office and Adobe. Everything beside Windows program)
+#_7. Enable Firewall Logging
 	netsh advfirewall set currentprofile logging filename %systemroot%\system32\LogFiles\Firewall\pfirewall.log
 	netsh advfirewall set currentprofile logging maxfilesize 4096
 	netsh advfirewall set currentprofile logging droppedconnections enable
-#_7. Disable AutoRun
+#_8. Disable AutoRun
 	reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v NoDriveTypeAutoRun /t REG_DWORD /d 0xff /f
 	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v NoDriveTypeAutoRun /t REG_DWORD /d 0xff /f
-#_8. Enlarge Windows Event Security Log Size
+
+#_9. View Hidden folder/attributes
+	reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t REG_DWORD /d 0 /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t REG_DWORD /d 0 /f
+	reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Hidden" /t REG_DWORD /d 1 /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Hidden" /t REG_DWORD /d 1 /f
+	reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowSuperHidden" /t REG_DWORD /d 1 /f
+	reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ShowSuperHidden" /t REG_DWORD /d 1 /f
+#_10. Enlarge Windows Event Security Log Size
 	wevtutil sl Security /ms:1024000
 	wevtutil sl Application /ms:1024000
 	wevtutil sl System /ms:1024000
 	wevtutil sl "Windows Powershell" /ms:1024000
 	wevtutil sl "Microsoft-Windows-PowerShell/Operational" /ms:1024000
-#_9. Enable Windows Defender sandboxing
+#_11. Enable Windows Defender sandboxing
 	setx /M MP_FORCE_USE_SANDBOX 1
-#_10. Update signatures
+#_12. Update signatures
 	"%ProgramFiles%"\"Windows Defender"\MpCmdRun.exe -SignatureUpdate
-#_11. Disable IPv6
+# 13. PowerShell Specific
+	Disable-PSRemoting
+	Disable-PSSessionConfiguration
+	Disable-PSSessionConfiguration -Name *
+#_14. Disable Remote Registry
+	Get-Service | Where-Object Name -eq RemoteRegistry
+	#If it is not stopped
+	Set-Service -Name RemoteRegistry -Status Stopped
+#_15. Disable IPv6
 	reg add "HKLM\SYSTEM\CurrentControlSet\services\tcpip6\parameters" /v DisabledComponents /t REG_DWORD /d 0xFF /f
-#_12. Install Autorun, Everything
-#_13. reboot computer
+#_16. Install Autorun, Everything, Tcpview
+#_17. reboot computer
 
 
 Windows Client:
@@ -276,15 +296,23 @@ Windows Client:
 	reg add "HKLM\SOFTWARE\Policies\Google\Chrome" /v "SitePerProcess" /t REG_DWORD /d 1 /f
 	reg add "HKLM\SOFTWARE\Policies\Google\Chrome" /v "TLS13HardeningForLocalAnchorsEnabled" /t REG_DWORD /d 1 /f
 	reg add "HKLM\SOFTWARE\Policies\Google\Chrome" /v "VideoCaptureAllowed" /t REG_DWORD /d 1 /f
-#_23. Enable Advanced Windows Logging
+#_23. PowerShell Specific
+	Disable-PSRemoting
+	Disable-PSSessionConfiguration
+	Disable-PSSessionConfiguration -Name *
+#_24. Disable Remote Registry
+	Get-Service | Where-Object Name -eq RemoteRegistry
+	#If it is not stopped
+	Set-Service -Name RemoteRegistry -Status Stopped
+#_25. Clear DNS Cache (DNS Poisoning)
+	ipconfig /displaydns
+	ipconfig /flushdns
+#_26. Enable Advanced Windows Logging
 	wevtutil sl Security /ms:1024000
 	wevtutil sl Application /ms:1024000
 	wevtutil sl System /ms:1024000
 	wevtutil sl "Windows Powershell" /ms:1024000
 	wevtutil sl "Microsoft-Windows-PowerShell/Operational" /ms:1024000
-#_24. Disable IPv6
+#_27. Disable IPv6
 	reg add "HKLM\SYSTEM\CurrentControlSet\services\tcpip6\parameters" /v DisabledComponents /t REG_DWORD /d 0xFF /f
-#_24. Uninstall pups	
-
-
-
+#_28. Uninstall pups	
